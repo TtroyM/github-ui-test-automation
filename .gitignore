@@ -1,0 +1,21 @@
+# Maven
+target/
+*.log
+
+# IntelliJ
+.idea/
+*.iml
+out/
+
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test reports
+test-output/
+reports/
+extent-reports/
+
+# WebDriver
+*.exe
