@@ -4,44 +4,44 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import pageObjects.HomePage;
 
 import java.time.Duration;
 
 public class HomePageStepDefinition {
-    private WebDriver driver = Hooks.driver;
+    private WebDriver driver;
+    private HomePage homePage;
 
     @Given("the user is on GitHub Home Page")
     public void the_user_is_on_git_hub_home_page() {
-
         driver = Hooks.driver;
-        driver.get("https://github.com");
-        Assert.assertTrue(driver.getTitle().contains("GitHub"));
+        homePage = new HomePage(driver);
+
+        homePage.open();
+        Assert.assertTrue(homePage.isAt(), "User is not on GitHub Home Page");
     }
     @When("the user searches for {string}")
     public void the_user_searches_for_result(String search) {
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        By searchButton = By.cssSelector("button[aria-label='Search or jump to…']");
-        wait.until(ExpectedConditions.elementToBeClickable(searchButton)).click();
-
-        By searchInput = By.cssSelector("input[type='text'][role='combobox']");
-        WebElement input = wait.until(ExpectedConditions.elementToBeClickable(searchInput));
-
-        input.sendKeys(search);
-        input.sendKeys(Keys.ENTER);
+        homePage.searchFor(search);
     }
 
     @Then("the correct {string} will be in search results")
     public void the_correct_search_will_be_in_results(String searchResult) {
 
-        Assert.assertTrue(driver.getPageSource().toLowerCase().contains(searchResult.toLowerCase()),
-                "Expected search results to contain: " + searchResult);
+        // searchResult example: "cucumber/docs"
+        By repoLink = By.cssSelector("a[href='/" + searchResult + "']");
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        // Wait until the results page has loaded and the link appears
+        wait.until(ExpectedConditions.presenceOfElementLocated(repoLink));
+
+        Assert.assertTrue(driver.findElements(repoLink).size() > 0,
+                "Expected search results to contain repo link: /" + searchResult);
     }
 }
