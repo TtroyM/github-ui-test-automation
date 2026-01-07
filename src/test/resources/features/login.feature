@@ -1,12 +1,13 @@
 
 Feature: Login validation
 
+  @smoke @ui @negative @login
   Scenario: Required field validation
     Given the user is on GitHub login page
     When the user clicks the Sign In button
     Then an error message should be displayed
 
-
+  @ui @regression @negative @login
   Scenario Outline: Invalid credentials show an authentication error
 
     Given the user is on GitHub login page

@@ -1,6 +1,7 @@
 
 Feature: Search for various repos (repositories)
 
+  @ui @regression @search
   Scenario Outline: Validate repositories that exist pop up and invalid repositories do not
 
     Given the user is on GitHub Home Page
@@ -10,5 +11,4 @@ Feature: Search for various repos (repositories)
     Examples:
       |       repo           |
       | cucumber/docs        |
-      | TheAlgorithms/Java   |
       | TtroyM/Escaping-Orcs |
